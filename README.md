@@ -66,6 +66,14 @@ To predict trends only, we need to threshold the labels in the middle to obtain 
 ## Conclusion
 After training the moddel with an 75/25 split we get an accuracy of about 92.17% and 0.2001 as Loss-value (Arousal)
 
+
+
+<p align="middle">
+    <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="drawing" width="50%"/>
+</p>
+
+
+
 ## References
 
 <a id="1">[1]</a>
