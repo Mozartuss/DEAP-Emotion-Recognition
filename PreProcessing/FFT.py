@@ -14,7 +14,7 @@ def fft_processing(subject, filename, channels, band, window_size, step_size, sa
         meta = []
         for i in range(0, 40):
             # loop over 0-39 trails
-            data = subject["data"][i][:32, 384:]
+            data = subject["data"][i]
             # Arousal and Valence
             labels = subject["labels"][i][:2]
             start = 0

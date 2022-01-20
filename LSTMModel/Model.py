@@ -1,9 +1,9 @@
 import os
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-from tensorflow.python.keras.layers import Bidirectional, LSTM, Dropout, Dense, Activation
-from tensorflow.python.keras.losses import categorical_crossentropy
-from tensorflow.python.keras.models import Sequential
+from tensorflow.keras.layers import Bidirectional, LSTM, Dropout, Dense, Activation
+from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.models import Sequential
 
 
 def build_model(input_shape):
@@ -35,7 +35,7 @@ def build_model(input_shape):
 
 
 def training(y_train, y_test, x_train, x_test, epochs):
-    model = build_model(input_shape=(x_train.shape[1], 1))
+    model = build_model(input_shape=(160, 1))
 
     history = model.fit(x_train, y_train, epochs=epochs, batch_size=256, verbose=1, validation_data=(x_test, y_test))
 

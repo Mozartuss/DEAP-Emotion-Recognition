@@ -5,18 +5,17 @@ import numpy as np
 from Utils.Constants import PREPROCESSED_DATA_PATH, FINAL_DATASET_PATH
 
 
-def build_dataset():
+def build_dataset(participant_list=range(1,33)):
     save_path_data_training = Path(FINAL_DATASET_PATH, "data_training.npy")
     save_path_label_training = Path(FINAL_DATASET_PATH, "label_training.npy")
     save_path_data_testing = Path(FINAL_DATASET_PATH, "data_testing.npy")
     save_path_label_testing = Path(FINAL_DATASET_PATH, "label_testing.npy")
 
-    participants = range(1, 33)
     x_train = []
     y_train = []
     x_test = []
     y_test = []
-    for participant in participants:
+    for participant in participant_list:
         with open(Path(PREPROCESSED_DATA_PATH, f"Participant_{participant}.npy"), "rb") as file:
             sub = np.load(file, allow_pickle=True)
             for i in range(0, sub.shape[0]):

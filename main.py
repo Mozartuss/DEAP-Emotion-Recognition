@@ -14,6 +14,8 @@ from Utils.Constants import RAW_DATA_PATH, DEAP_ELECTRODES, SAVED_MODEL_GRAPH_PA
 from Utils.DataHandler import LoadData
 
 if __name__ == '__main__':
+    classify_name = "Arousal" #"Valence"
+
     load_data = LoadData(RAW_DATA_PATH)
     for filename, data in load_data.yield_raw_data():
         fft_processing(subject=data,
@@ -25,17 +27,21 @@ if __name__ == '__main__':
                        sample_rate=128,
                        overwrite=True)
 
-    build_dataset()
+    build_dataset(participant_list=range(1,33))
 
-    y_train, y_test, x_train, x_test = prepare_dataset("Arousal")
+    x_train, y_train, x_test, y_test = prepare_dataset(classify_name)
 
+    
+    print("Training: ", x_train.shape, y_train.shape)
+    print("Test: ", x_test.shape, y_test.shape)
+    
     gpus = tf.config.list_physical_devices("GPU")
     for gpu in gpus:
         print("Name:", gpu.name, "  Type:", gpu.device_type)
 
     h, m = training(y_train, y_test, x_train, x_test, 200)
-
     score = m.evaluate(x_test, y_test, verbose=1)
+   
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
 
@@ -48,9 +54,9 @@ if __name__ == '__main__':
     plt.legend(["accuracy", "loss"])
     plt.ylabel('loss/accuracy')
     plt.xlabel('epoch')
-    plt.savefig(Path(SAVED_MODEL_GRAPH_PATH, "Graph.pdf"))
+    plt.savefig(Path(SAVED_MODEL_GRAPH_PATH, "Graph_{classify_name}.pdf"))
 
     if not SAVE_TRAINED_MODEL_PATH.exists():
         SAVE_TRAINED_MODEL_PATH.mkdir(exist_ok=True)
 
-    m.save(Path(SAVE_TRAINED_MODEL_PATH, "fft_lstm.h5"))
+    m.save(Path(SAVE_TRAINED_MODEL_PATH, f"fft_lstm_{classify_name}.h5"))
