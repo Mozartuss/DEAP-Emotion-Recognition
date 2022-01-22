@@ -54,7 +54,7 @@ if __name__ == '__main__':
     plt.legend(["accuracy", "loss"])
     plt.ylabel('loss/accuracy')
     plt.xlabel('epoch')
-    plt.savefig(Path(SAVED_MODEL_GRAPH_PATH, "Graph_{classify_name}.pdf"))
+    plt.savefig(Path(SAVED_MODEL_GRAPH_PATH, f"Graph_{classify_name}.pdf"))
 
     if not SAVE_TRAINED_MODEL_PATH.exists():
         SAVE_TRAINED_MODEL_PATH.mkdir(exist_ok=True)
