@@ -69,8 +69,8 @@ After training the moddel with an 75/25 split we get an accuracy of about 92.17%
 
 
 <p align="middle">
-    <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="drawing" width="50%"/>
-    <img src="https://user-images.githubusercontent.com/32893711/150751426-829e6310-7275-4400-bddc-86f6fda6cfd0.png" alt="drawing" width="50%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="drawing" width="45%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/150751426-829e6310-7275-4400-bddc-86f6fda6cfd0.png" alt="drawing" width="45%"/>
 </p>
 
 
