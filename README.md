@@ -1,6 +1,6 @@
 # Emotion recognition with the LSTM RNN
 
-Implement an modified version of the LSTM RNN Model wich is used by Acharya D. et al. [[1]](#1) to get an accuracy of about 92.17% (Arousal)
+Implement an modified version of the LSTM RNN Model wich is used by Acharya D. et al. [[1]](#1) to get an accuracy of about 92.17% (Arousal) and about 94.46% (Valence)
 
 ## Preprocessing
 
@@ -64,12 +64,13 @@ The DEAP dataset contains 4 different labels: dominance, liking, arousal, and va
 To predict trends only, we need to threshold the labels in the middle to obtain binary values, since each label in the DEAP dataset was scored between 1 and 10.
 
 ## Conclusion
-After training the moddel with an 75/25 split we get an accuracy of about 92.17% and 0.2001 as Loss-value (Arousal)
+After training the moddel with an 75/25 split we get an accuracy of about 92.17% and 0.2001 as Loss-value (Arousal) and about 94.46% and 0.1553 as Loss-value (Valence)
 
 
 
 <p align="middle">
     <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="drawing" width="50%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/150751426-829e6310-7275-4400-bddc-86f6fda6cfd0.png" alt="drawing" width="50%"/>
 </p>
 
 
