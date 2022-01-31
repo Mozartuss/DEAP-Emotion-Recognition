@@ -17,6 +17,8 @@ from Utils.DataHandler import LoadData
 
 
 def main(classify_type: str = "Arousal", pca: bool = False):
+    print(f"Run Training with PCA = {pca} on {classify_type}")
+    
     if classify_type == "Arousal":
         classify_name = "Arousal"
     else:
