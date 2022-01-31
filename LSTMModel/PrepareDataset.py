@@ -1,16 +1,20 @@
 from pathlib import Path
-from sklearn.preprocessing import normalize, StandardScaler
-
-from tensorflow.keras.utils import to_categorical
 
 import numpy as np
+from sklearn.preprocessing import normalize, StandardScaler
+from tensorflow.keras.utils import to_categorical
 
-from Utils.Constants import FINAL_DATASET_PATH
+from Utils.Constants import FINAL_DATASET_PATH, FINAL_DATASET_PATH_PCA
 
 
-def prepare_dataset(label_type: str = "Arousal"):
-    x_train = np.load(str(Path(FINAL_DATASET_PATH, "data_training.npy")))
-    y_train = np.load(str(Path(FINAL_DATASET_PATH, "label_training.npy")))
+def prepare_dataset(label_type: str = "Arousal", pca: bool = False):
+    if pca:
+        data_path = FINAL_DATASET_PATH_PCA
+    else:
+        data_path = FINAL_DATASET_PATH
+
+    x_train = np.load(str(Path(data_path, "data_training.npy")))
+    y_train = np.load(str(Path(data_path, "label_training.npy")))
 
     x_train = normalize(x_train)
     y_train_arousal = np.ravel(y_train[:, [0]])
@@ -19,8 +23,8 @@ def prepare_dataset(label_type: str = "Arousal"):
     y_train_valence = to_categorical(y_train_valence)
     x_train = np.array(x_train[:])
 
-    x_test = np.load(str(Path(FINAL_DATASET_PATH, "data_testing.npy")))
-    y_test = np.load(str(Path(FINAL_DATASET_PATH, "label_testing.npy")))
+    x_test = np.load(str(Path(data_path, "data_testing.npy")))
+    y_test = np.load(str(Path(data_path, "label_testing.npy")))
 
     x_test = normalize(x_test)
     y_test_arousal = np.ravel(y_test[:, [0]])

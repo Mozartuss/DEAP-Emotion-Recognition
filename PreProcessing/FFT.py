@@ -3,13 +3,17 @@ from pathlib import Path
 import numpy as np
 import pyeeg as pe
 
-from Utils.Constants import PREPROCESSED_DATA_PATH
+from Utils.Constants import PREPROCESSED_DATA_PATH, PREPROCESSED_DATA_PATH_PCA
 from Utils.Helper import delete_leading_zero
 
 
-def fft_processing(subject, filename, channels, band, window_size, step_size, sample_rate, overwrite):
+def fft_processing(subject, filename, channels, band, window_size, step_size, sample_rate, overwrite, pca=False):
+    if pca:
+        save_path = PREPROCESSED_DATA_PATH_PCA
+    else:
+        save_path = PREPROCESSED_DATA_PATH
     p_num = delete_leading_zero(filename.split(".")[0][1:])
-    save_file_path = Path(PREPROCESSED_DATA_PATH, f"Participant_{p_num}.npy")
+    save_file_path = Path(save_path, f"Participant_{p_num}.npy")
     if not save_file_path.exists() or overwrite:
         meta = []
         for i in range(0, 40):
@@ -27,7 +31,10 @@ def fft_processing(subject, filename, channels, band, window_size, step_size, sa
                     x = data[j][start: start + window_size]
                     # FFT over 2 sec of channel j, in seq of theta, alpha, low beta, high beta, gamma
                     y = pe.bin_power(x, band, sample_rate)
-                    meta_data = meta_data + list(y[0])
+                    if (pca):
+                        meta_data.append(np.array(y[0]))
+                    else:
+                        meta_data = meta_data + list(y[0])
 
                 meta_array.append(np.array(meta_data))
                 label_bin = np.array(labels >= 5).astype(int)
@@ -37,8 +44,8 @@ def fft_processing(subject, filename, channels, band, window_size, step_size, sa
                 start = start + step_size
 
         meta = np.array(meta)
-        if not PREPROCESSED_DATA_PATH.exists():
-            PREPROCESSED_DATA_PATH.mkdir(exist_ok=True)
+        if not save_path.exists():
+            save_path.mkdir(exist_ok=True)
 
         np.save(save_file_path, meta, allow_pickle=True, fix_imports=True)
 

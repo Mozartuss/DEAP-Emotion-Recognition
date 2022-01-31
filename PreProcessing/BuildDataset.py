@@ -5,7 +5,7 @@ import numpy as np
 from Utils.Constants import PREPROCESSED_DATA_PATH, FINAL_DATASET_PATH
 
 
-def build_dataset(participant_list=range(1,33)):
+def build_dataset(participant_list=range(1, 33)):
     save_path_data_training = Path(FINAL_DATASET_PATH, "data_training.npy")
     save_path_label_training = Path(FINAL_DATASET_PATH, "label_training.npy")
     save_path_data_testing = Path(FINAL_DATASET_PATH, "data_testing.npy")
