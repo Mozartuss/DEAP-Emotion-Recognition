@@ -16,7 +16,7 @@ from Utils.Constants import RAW_DATA_PATH, DEAP_ELECTRODES, SAVED_MODEL_GRAPH_PA
 from Utils.DataHandler import LoadData
 
 
-def main(classify_type: str = "Arousal", pca: bool = False):
+def main(classify_type: str, pca: bool):
     print(f"Run Training with PCA = {pca} on {classify_type}")
     
     if classify_type == "Arousal":
