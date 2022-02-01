@@ -1,21 +1,22 @@
 from pathlib import Path
 
 import numpy as np
-from sklearn.decomposition import PCA
+import pandas as pd
+from mrmr import mrmr_classif
 
-from Utils.Constants import PREPROCESSED_DATA_PATH_FS, FINAL_DATASET_PATH_PCA
+from Utils.Constants import FINAL_DATASET_PATH_MRMR, PREPROCESSED_DATA_PATH_FS
 
 
-def build_dataset_with_pca(participant_list=range(1, 33), components=20):
-    print(f"Run PCA channel selection method to select {components} channels")
+def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = "Arousal"):
+    print(f"Run MRMR channel selection method with {classify_type} to select {components} channels")
 
     num_channel = 32
     num_frequencies = 5
 
-    save_path_data_training = Path(FINAL_DATASET_PATH_PCA, "data_training.npy")
-    save_path_label_training = Path(FINAL_DATASET_PATH_PCA, "label_training.npy")
-    save_path_data_testing = Path(FINAL_DATASET_PATH_PCA, "data_testing.npy")
-    save_path_label_testing = Path(FINAL_DATASET_PATH_PCA, "label_testing.npy")
+    save_path_data_training = Path(FINAL_DATASET_PATH_MRMR, "data_training.npy")
+    save_path_label_training = Path(FINAL_DATASET_PATH_MRMR, "label_training.npy")
+    save_path_data_testing = Path(FINAL_DATASET_PATH_MRMR, "data_testing.npy")
+    save_path_label_testing = Path(FINAL_DATASET_PATH_MRMR, "label_testing.npy")
 
     x_train = []
     y_train = []
@@ -34,9 +35,16 @@ def build_dataset_with_pca(participant_list=range(1, 33), components=20):
             label = np.array(label)
 
         x = data.transpose((1, 0, 2)).reshape(num_channel, -1).transpose((1, 0))
+        if classify_type.lower() == "arousal":
+            y = np.repeat(label[:, 0], num_frequencies)
+        else:
+            y = np.repeat(label[:, 1], num_frequencies)
 
-        pca = PCA(n_components=components)
-        data_new = pca.fit_transform(x)
+        x = pd.DataFrame(x)
+        y = pd.Series(y)
+
+        mrmr_x_idx = mrmr_classif(X=x, y=y, K=components)
+        data_new = x[mrmr_x_idx].to_numpy()
 
         z = []
         for i in data_new.transpose(1, 0):
@@ -52,8 +60,8 @@ def build_dataset_with_pca(participant_list=range(1, 33), components=20):
                 x_train.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
                 y_train.append(label[i])
 
-    if not FINAL_DATASET_PATH_PCA.exists():
-        FINAL_DATASET_PATH_PCA.mkdir(exist_ok=True)
+    if not FINAL_DATASET_PATH_MRMR.exists():
+        FINAL_DATASET_PATH_MRMR.mkdir(exist_ok=True)
 
     np.save(save_path_data_training, np.array(x_train), allow_pickle=True, fix_imports=True)
     np.save(save_path_label_training, np.array(y_train), allow_pickle=True, fix_imports=True)
@@ -65,4 +73,4 @@ def build_dataset_with_pca(participant_list=range(1, 33), components=20):
 
 
 if __name__ == '__main__':
-    build_dataset_with_pca(participant_list=range(1, 33), components=20)
+    use_mrmr()

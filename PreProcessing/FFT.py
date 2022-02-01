@@ -3,13 +3,13 @@ from pathlib import Path
 import numpy as np
 import pyeeg as pe
 
-from Utils.Constants import PREPROCESSED_DATA_PATH, PREPROCESSED_DATA_PATH_PCA
+from Utils.Constants import PREPROCESSED_DATA_PATH, PREPROCESSED_DATA_PATH_FS
 from Utils.Helper import delete_leading_zero
 
 
-def fft_processing(subject, filename, channels, band, window_size, step_size, sample_rate, overwrite, pca=False):
-    if pca:
-        save_path = PREPROCESSED_DATA_PATH_PCA
+def fft_processing(subject, filename, channels, band, window_size, step_size, sample_rate, overwrite, fs=False):
+    if fs:
+        save_path = PREPROCESSED_DATA_PATH_FS
     else:
         save_path = PREPROCESSED_DATA_PATH
     p_num = delete_leading_zero(filename.split(".")[0][1:])
@@ -31,7 +31,7 @@ def fft_processing(subject, filename, channels, band, window_size, step_size, sa
                     x = data[j][start: start + window_size]
                     # FFT over 2 sec of channel j, in seq of theta, alpha, low beta, high beta, gamma
                     y = pe.bin_power(x, band, sample_rate)
-                    if (pca):
+                    if (fs):
                         meta_data.append(np.array(y[0]))
                     else:
                         meta_data = meta_data + list(y[0])
@@ -63,4 +63,5 @@ if __name__ == '__main__':
                        window_size=256,
                        step_size=16,
                        sample_rate=128,
-                       overwrite=True)
+                       overwrite=True,
+                       fs=True)

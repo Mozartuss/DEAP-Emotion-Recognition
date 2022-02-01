@@ -4,6 +4,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import typer as typer
 
+from FeatureExtraction.MRMR import use_mrmr
 from FeatureExtraction.PCA import build_dataset_with_pca
 from LSTMModel.Model import training
 
@@ -16,16 +17,23 @@ from Utils.Constants import RAW_DATA_PATH, DEAP_ELECTRODES, SAVED_MODEL_GRAPH_PA
 from Utils.DataHandler import LoadData
 
 
-def main(classify_type: str, pca: bool):
-    print(f"Run Training with PCA = {pca} on {classify_type}")
-    
+def main(classify_type: str, fs: str):
+    print(f"Run Training with {fs} as channel extraction method on {classify_type}")
+    fs_pca = False
+    fs_mrmr = False
     if classify_type == "Arousal":
         classify_name = "Arousal"
     else:
         classify_name = "Valence"
 
-    if pca:
-        classify_name = classify_name + "_pca"
+    if fs != "":
+        classify_name = classify_name + "_" + fs
+
+    if fs.lower() == "pca":
+        fs_pca = True
+    elif fs.lower() == "mrmr":
+        fs_mrmr = True
+
     load_data = LoadData(RAW_DATA_PATH)
     for filename, data in load_data.yield_raw_data():
         fft_processing(subject=data,
@@ -36,14 +44,16 @@ def main(classify_type: str, pca: bool):
                        step_size=16,
                        sample_rate=128,
                        overwrite=True,
-                       pca=pca)
+                       fs=fs_pca or fs_mrmr)
 
-    if pca:
+    if fs.lower() == "pca":
         build_dataset_with_pca(participant_list=range(1, 33), components=20)
+    elif fs.lower() == "mrmr":
+        use_mrmr(participant_list=range(1, 33), components=20, classify_type=classify_type)
     else:
         build_dataset(participant_list=range(1, 33))
 
-    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=pca)
+    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=fs_pca, mrmr=fs_mrmr)
 
     print("Training: ", x_train.shape, y_train.shape)
     print("Test: ", x_test.shape, y_test.shape)
