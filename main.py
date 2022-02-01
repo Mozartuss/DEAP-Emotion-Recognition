@@ -17,7 +17,7 @@ from Utils.Constants import RAW_DATA_PATH, DEAP_ELECTRODES, SAVED_MODEL_GRAPH_PA
 from Utils.DataHandler import LoadData
 
 
-def main(classify_type: str, fs: str):
+def main(classify_type: str, fs: str, overwrite: bool):
     print(f"Run Training with {fs} as channel extraction method on {classify_type}")
     fs_pca = False
     fs_mrmr = False
@@ -43,7 +43,7 @@ def main(classify_type: str, fs: str):
                        window_size=256,
                        step_size=16,
                        sample_rate=128,
-                       overwrite=True,
+                       overwrite=overwrite,
                        fs=fs_pca or fs_mrmr)
 
     if fs.lower() == "pca":

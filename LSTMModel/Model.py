@@ -35,7 +35,7 @@ def build_model(input_shape):
 
 
 def training(y_train, y_test, x_train, x_test, epochs):
-    model = build_model(input_shape=(160, 1))
+    model = build_model(input_shape=(x_train.shape[1], 1))
 
     history = model.fit(x_train, y_train, epochs=epochs, batch_size=256, verbose=1, validation_data=(x_test, y_test))
 
