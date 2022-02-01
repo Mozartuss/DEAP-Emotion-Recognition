@@ -17,11 +17,11 @@ from Utils.Constants import RAW_DATA_PATH, DEAP_ELECTRODES, SAVED_MODEL_GRAPH_PA
 from Utils.DataHandler import LoadData
 
 
-def main(classify_type: str, fs: str, overwrite: bool):
+def main(classify_type: str, fs: str, overwrite: bool, gpu: int):
     print(f"Run Training with {fs} as channel extraction method on {classify_type}")
     fs_pca = False
     fs_mrmr = False
-    if classify_type == "Arousal":
+    if classify_type.lower() == "arousal":
         classify_name = "Arousal"
     else:
         classify_name = "Valence"
@@ -62,8 +62,12 @@ def main(classify_type: str, fs: str, overwrite: bool):
     for gpu in gpus:
         print("Name:", gpu.name, "  Type:", gpu.device_type)
 
-    h, m = training(y_train, y_test, x_train, x_test, 200)
-    score = m.evaluate(x_test, y_test, verbose=1)
+    try:
+        with tf.device(f'/device:GPU:{gpu}'):
+            h, m = training(y_train, y_test, x_train, x_test, 200)
+            score = m.evaluate(x_test, y_test, verbose=1)
+    except RuntimeError as e:
+        print(e)
 
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
@@ -83,6 +87,7 @@ def main(classify_type: str, fs: str, overwrite: bool):
         SAVE_TRAINED_MODEL_PATH.mkdir(exist_ok=True)
 
     m.save(Path(SAVE_TRAINED_MODEL_PATH, f"fft_lstm_{classify_name}.h5"))
+
 
 if __name__ == '__main__':
     typer.run(main)
