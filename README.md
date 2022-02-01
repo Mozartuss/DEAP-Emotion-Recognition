@@ -64,7 +64,7 @@ The DEAP dataset contains 4 different labels: dominance, liking, arousal, and va
 To predict trends only, we need to threshold the labels in the middle to obtain binary values, since each label in the DEAP dataset was scored between 1 and 10.
 
 ## Conclusion
-After training the moddel with an 75/25 split we get an accuracy of about 92.17% and 0.2001 as Loss-value (Arousal) and about 94.46% and 0.1553 as Loss-value (Valence)
+After training the moddel with an 75/25 split we get an accuracy of about 92.17% and 0.2001 as Loss-value (Arousal) (Left) and about 94.46% and 0.1553 as Loss-value (Valence) (Right)
 
 
 <p align="middle">
