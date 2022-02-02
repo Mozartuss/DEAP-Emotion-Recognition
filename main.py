@@ -110,3 +110,4 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
 
 if __name__ == '__main__':
     typer.run(main)
+    print("test")
