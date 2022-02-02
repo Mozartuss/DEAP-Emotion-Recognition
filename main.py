@@ -33,7 +33,8 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
     elif gpu.lower() == "multi":
         gpus = tf.config.list_logical_devices('GPU')
         if len(gpus) > 1:
-            typer.echo("Train on multiple GPUS: " + gpus.to_string())
+            typer.echo("Train on multiple GPUS:")
+            typer.echo(gpus)
             gpu_setting = tf.distribute.MirroredStrategy(gpus).scope()
         else:
             typer.echo("Train on single GPU: 0")
