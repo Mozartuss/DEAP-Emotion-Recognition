@@ -31,11 +31,11 @@ def build_dataset(participant_list=range(1, 33)):
 
     np.save(save_path_data_training, np.array(x_train), allow_pickle=True, fix_imports=True)
     np.save(save_path_label_training, np.array(y_train), allow_pickle=True, fix_imports=True)
-    print("training dataset:", np.array(x_train).shape, np.array(y_train).shape)
 
     np.save(save_path_data_testing, np.array(x_test), allow_pickle=True, fix_imports=True)
     np.save(save_path_label_testing, np.array(y_test), allow_pickle=True, fix_imports=True)
-    print("testing dataset:", np.array(x_test).shape, np.array(y_test).shape)
+
+    print("Dataset has been transformed without any channel selection")
 
 
 if __name__ == '__main__':
