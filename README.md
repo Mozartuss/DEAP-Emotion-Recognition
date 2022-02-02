@@ -78,7 +78,7 @@ In order to achieve a better result, the channel optimization algorithm Principa
     <img src="https://user-images.githubusercontent.com/32893711/151954460-e1ce13e9-efb6-4caf-b964-1ffa8da84785.jpg" alt="Arousal PCA" width="45%"/>
 </p>
 
-With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr), the same accuracy was achieved as without channel optimisation, however, 20 channels were still used here, probably only when more channels are removed different results are obtained. Arousal was classified with an accuracy of 82.51% and a loss of 0.2017
+With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr), the same accuracy was achieved as without channel optimisation, however, 20 channels were still used here, probably only when more channels are removed different results are obtained. Arousal was classified with an accuracy of 92.51% and a loss of 0.2017, and Valence with an Accuracy of 92.36% and a loss of 0.1983
 
 <p align="middle">
     <img src="https://user-images.githubusercontent.com/32893711/152112058-ec8a76d9-c2b2-44e2-bfc8-930bae17e1e8.png" alt="Arousal MRMR" width="45%"/>
