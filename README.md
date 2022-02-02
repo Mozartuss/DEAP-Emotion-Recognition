@@ -82,7 +82,9 @@ With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr),
 
 <p align="middle">
     <img src="https://user-images.githubusercontent.com/32893711/152112058-ec8a76d9-c2b2-44e2-bfc8-930bae17e1e8.png" alt="Arousal MRMR" width="45%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/152136440-59c6730c-1544-479f-bff1-1e6f350d3410.png" alt="Valence MRMR" width="45%"/>
 </p>
+
 
 
 ## References
