@@ -7,6 +7,7 @@ import typer
 
 from FeatureExtraction.MRMR import use_mrmr
 from FeatureExtraction.PCA import build_dataset_with_pca
+from FeatureExtraction.PSO import build_dataset_with_pso
 from LSTMModel.Model import training
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -109,4 +110,5 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
 
 
 if __name__ == '__main__':
-    typer.run(main)
+    # typer.run(main)
+    build_dataset_with_pso()
