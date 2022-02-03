@@ -7,7 +7,7 @@ import typer
 
 from FeatureExtraction.MRMR import use_mrmr
 from FeatureExtraction.PCA import build_dataset_with_pca
-from FeatureExtraction.PSO import build_dataset_with_pso
+from FeatureExtraction.PSO import use_pso
 from LSTMModel.Model import training
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -46,6 +46,7 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
 
     fs_pca = False
     fs_mrmr = False
+    fs_pso = False
     classify_name = classify_type.lower()
 
     if fs != "":
@@ -55,6 +56,8 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
         fs_pca = True
     elif fs.lower() == "mrmr":
         fs_mrmr = True
+    elif fs.lower() == "pso":
+        fs_pso = True
 
     SAVED_MODEL_GRAPH_PATH.mkdir(exist_ok=True)
     SAVE_TRAINED_MODEL_PATH.mkdir(exist_ok=True)
@@ -76,10 +79,13 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
         build_dataset_with_pca(participant_list=range(1, 33), components=20)
     elif fs_mrmr:
         use_mrmr(participant_list=range(1, 33), components=20, classify_type=classify_type)
+    elif fs_pso:
+        use_pso(participant_list=range(1, 33), classify_type=classify_type, n_particle=128, n_iterations=10,
+                components=20)
     else:
         build_dataset(participant_list=range(1, 33))
 
-    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=fs_pca, mrmr=fs_mrmr)
+    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=fs_pca, mrmr=fs_mrmr, pso=fs_pso)
 
     print("Training: ", x_train.shape, y_train.shape)
     print("Test: ", x_test.shape, y_test.shape)
@@ -110,5 +116,4 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
 
 
 if __name__ == '__main__':
-    # typer.run(main)
-    build_dataset_with_pso()
+    typer.run(main)

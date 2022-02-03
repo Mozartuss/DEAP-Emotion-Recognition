@@ -102,7 +102,7 @@ def boundary(x, lb, ub):
     return x
 
 
-def jfs(xtrain, ytrain, opts):
+def jfs(xtrain, opts, resulting_channels):
     # Parameters
     ub = 1
     lb = 0
@@ -173,12 +173,10 @@ def jfs(xtrain, ytrain, opts):
                 X[i, d] = boundary(X[i, d], lb[0, d], ub[0, d])
 
     # Best feature subset
-    Gbin = binary_conversion(Xgb, thres, 1, dim)
-    Gbin = Gbin.reshape(dim)
-    pos = np.asarray(range(0, dim))
-    sel_index = pos[Gbin == 1]
-    num_feat = len(sel_index)
+    x_best = Xgb[0].argsort()[-resulting_channels:][::-1]
+    x_best.sort()
+    num_feat = len(x_best)
     # Create dictionary
-    pso_data = {'sf': sel_index, 'c': curve, 'nf': num_feat}
+    pso_data = {'sf': x_best, 'c': curve, 'nf': num_feat, "df": Xgb[0]}
 
     return pso_data
