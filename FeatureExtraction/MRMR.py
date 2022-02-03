@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from mrmr import mrmr_classif
 
-from Utils.Constants import FINAL_DATASET_PATH_MRMR, PREPROCESSED_DATA_PATH_FS
+from Utils.Constants import FINAL_DATASET_PATH_MRMR, PREPROCESSED_DATA_PATH_FS, SAVE_MRMR_CHANNELS_PATH
 
 
 def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = "Arousal"):
@@ -18,10 +18,14 @@ def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = 
     save_path_data_testing = Path(FINAL_DATASET_PATH_MRMR, "data_testing.npy")
     save_path_label_testing = Path(FINAL_DATASET_PATH_MRMR, "label_testing.npy")
 
+    FINAL_DATASET_PATH_MRMR.mkdir(exist_ok=True)
+    SAVE_MRMR_CHANNELS_PATH.mkdir(exist_ok=True)
+
     x_train = []
     y_train = []
     x_test = []
     y_test = []
+    backup = []
     for participant in participant_list:
         filename = f"Participant_{participant}.npy"
         with open(Path(PREPROCESSED_DATA_PATH_FS, filename), "rb") as file:
@@ -44,6 +48,9 @@ def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = 
         y = pd.Series(y)
 
         mrmr_x_idx = mrmr_classif(X=x, y=y, K=components)
+
+        backup.append([participant, mrmr_x_idx, len(mrmr_x_idx)])
+
         data_new = x[mrmr_x_idx].to_numpy()
 
         z = []
@@ -60,8 +67,8 @@ def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = 
                 x_train.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
                 y_train.append(label[i])
 
-    if not FINAL_DATASET_PATH_MRMR.exists():
-        FINAL_DATASET_PATH_MRMR.mkdir(exist_ok=True)
+    pd.DataFrame(backup, columns=["participant", "channels", "n_channels", "channel_acc"], index=None).to_csv(
+        Path(SAVE_MRMR_CHANNELS_PATH, "pso_channels.csv"), index=False)
 
     np.save(save_path_data_training, np.array(x_train), allow_pickle=True, fix_imports=True)
     np.save(save_path_label_training, np.array(y_train), allow_pickle=True, fix_imports=True)
