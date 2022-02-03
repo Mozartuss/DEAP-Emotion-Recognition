@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from mrmr import mrmr_classif
 
-from Utils.Constants import FINAL_DATASET_PATH_MRMR, PREPROCESSED_DATA_PATH_FS
+from Utils.Constants import FINAL_DATASET_PATH_MRMR, PREPROCESSED_DATA_PATH_FS, SAVE_MRMR_CHANNELS_PATH
 
 
 def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = "Arousal"):
