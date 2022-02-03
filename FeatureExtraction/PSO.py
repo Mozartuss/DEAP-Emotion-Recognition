@@ -16,13 +16,12 @@ COMP = 20
 
 
 def use_pso(participant_list: [int] = range(1, 10), classify_type: str = "Arousal", n_particle: int = 128,
-            n_iterations: int = 32, components: int = 20):
+            n_iterations: int = 32, components: int = 20, n_cores: int = multiprocessing.cpu_count()):
     global CLASSIFY_TYPE, N, T, COMP
     COMP = components
     CLASSIFY_TYPE = classify_type
     N = n_particle
     T = n_iterations
-    n_cores = multiprocessing.cpu_count()
     print(
         f"Run PSO channel selection method with {CLASSIFY_TYPE} and with {N} particles and with {T} max iterations on {n_cores} cores")
 
@@ -100,4 +99,5 @@ def exec_pso(participant):
 
 if __name__ == '__main__':
     print(multiprocessing.cpu_count())
-    use_pso(participant_list=range(1, 10), classify_type="Arousal", n_particle=10, n_iterations=2, components=20)
+    use_pso(participant_list=range(1, 10), classify_type="Arousal", n_particle=2, n_iterations=1, components=20,
+            n_cores=1)
