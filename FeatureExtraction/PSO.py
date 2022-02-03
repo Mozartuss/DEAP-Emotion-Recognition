@@ -1,12 +1,11 @@
 import multiprocessing
-from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-from FeatureExtraction.PSO_helper import jfs
+from FeatureExtraction.PSO_helper import pso_main
 from Utils.Constants import FINAL_DATASET_PATH_PSO, PREPROCESSED_DATA_PATH_FS, SAVE_PSO_CHANNELS_PATH
 
 classify_type = "Valence"
@@ -23,39 +22,39 @@ def build_dataset_with_pso(participant_list=range(1, 10), ct: str = "Arousal", n
     print(
         f"Run PSO channel selection method with {classify_type} and with {N} particles and with {T} max iterations on {n_cores} cores")
 
-    x_train = []
-    y_train = []
-    x_test = []
-    y_test = []
     backup = []
 
-    save_path_data_training = Path(FINAL_DATASET_PATH_PSO, "data_training.npy")
-    save_path_label_training = Path(FINAL_DATASET_PATH_PSO, "label_training.npy")
-    save_path_data_testing = Path(FINAL_DATASET_PATH_PSO, "data_testing.npy")
-    save_path_label_testing = Path(FINAL_DATASET_PATH_PSO, "label_testing.npy")
     SAVE_PSO_CHANNELS_PATH.mkdir(exist_ok=True)
-    with ProcessPoolExecutor(max_workers=n_cores) as executor:
-        for label, zx, p, ch in executor.map(exec_pso, participant_list):
-            backup.append([p, ch])
-            for i in range(0, zx.shape[0]):
-                if i % 4 == 0:
-                    x_test.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
-                    y_test.append(label[i])
-                else:
-                    x_train.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
-                    y_train.append(label[i])
+    FINAL_DATASET_PATH_PSO.mkdir(exist_ok=True)
 
-    pd.DataFrame(backup, columns=["participant", "channels"], index=None).to_csv(
+    for participant in participant_list:
+        x_train = []
+        y_train = []
+        x_test = []
+        y_test = []
+        label, zx, p, ch, cost = exec_pso(participant)
+        backup.append([p, ch, len(ch), cost])
+        for i in range(0, zx.shape[0]):
+            if i % 4 == 0:
+                x_test.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
+                y_test.append(label[i])
+            else:
+                x_train.append(zx[i].reshape(zx.shape[1] * zx.shape[2], ))
+                y_train.append(label[i])
+
+        np.save(str(Path(FINAL_DATASET_PATH_PSO, f"Participant_{participant}", "data_training.npy")), np.array(x_train),
+                allow_pickle=True, fix_imports=True)
+        np.save(str(Path(FINAL_DATASET_PATH_PSO, f"Participant_{participant}", "label_training.npy")),
+                np.array(y_train),
+                allow_pickle=True, fix_imports=True)
+
+        np.save(str(Path(FINAL_DATASET_PATH_PSO, f"Participant_{participant}", "data_testing.npy")), np.array(x_test),
+                allow_pickle=True, fix_imports=True)
+        np.save(str(Path(FINAL_DATASET_PATH_PSO, f"Participant_{participant}", "label_testing.npy")), np.array(y_test),
+                allow_pickle=True, fix_imports=True)
+
+    pd.DataFrame(backup, columns=["participant", "channels", "num_channel", "cost"], index=None).to_csv(
         Path(SAVE_PSO_CHANNELS_PATH, "pso_channels.csv"), index=False)
-
-    if not FINAL_DATASET_PATH_PSO.exists():
-        FINAL_DATASET_PATH_PSO.mkdir(exist_ok=True)
-
-    np.save(save_path_data_training, np.array(x_train), allow_pickle=True, fix_imports=True)
-    np.save(save_path_label_training, np.array(y_train), allow_pickle=True, fix_imports=True)
-
-    np.save(save_path_data_testing, np.array(x_test), allow_pickle=True, fix_imports=True)
-    np.save(save_path_label_testing, np.array(y_test), allow_pickle=True, fix_imports=True)
 
 
 def exec_pso(participant):
@@ -80,26 +79,20 @@ def exec_pso(participant):
     xtrain, xtest, ytrain, ytest = train_test_split(x, y, test_size=0.3, stratify=y)
     fold = {'xt': xtrain, 'yt': ytrain, 'xv': xtest, 'yv': ytest}
     # parameter  # k-value in KNN
-    w = 0.9
-    c1 = 2
-    c2 = 2
-    opts = {'fold': fold, 'N': N, 'T': T, 'w': w, 'c1': c1, 'c2': c2}
-    fmdl = jfs(x, y, opts)
-    sf = fmdl['sf']
-    print("Channel Indexes")
-    print(sf)
-    # number of selected features
-    num_feat = fmdl['nf']
-    print("Channel Size:", num_feat)
+
+    options = {'c1': 0.5, 'c2': 0.5, 'w': 0.9, "k": 30, "p": 2}
+    dimensions = num_channel
+    cost, pos = pso_main(x, y, options, dimensions, N, multiprocessing.cpu_count(), T)
+    sel_index = np.asarray(range(0, dimensions))[pos == 1]
     x = pd.DataFrame(x)
-    data_new = x[sf].to_numpy()
+    data_new = x[sel_index].to_numpy()
     z = []
     for i in data_new.transpose(1, 0):
         z.append(i.reshape(-1, num_frequencies))
     zx = np.array(z).transpose((1, 0, 2))
-    return label, zx, participant, sf
+    return label, zx, participant, sel_index, cost
 
 
 if __name__ == '__main__':
     print(multiprocessing.cpu_count())
-    build_dataset_with_pso()
+    build_dataset_with_pso(participant_list=range(1, 33), ct="Arousal", n_particle=32, n_iterations=10)

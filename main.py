@@ -111,4 +111,4 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
 
 if __name__ == '__main__':
     # typer.run(main)
-    build_dataset_with_pso()
+    build_dataset_with_pso(participant_list=range(1, 33), ct="Arousal", n_particle=32, n_iterations=30)

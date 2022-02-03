@@ -1,184 +1,78 @@
 import warnings
+from datetime import datetime
 
+import humanize
 import numpy as np
-from numpy.random import rand
-# error rate
+# Create an instance of the classifier
+from pyswarms.discrete import BinaryPSO
 from sklearn.svm import SVC
 
 warnings.filterwarnings('ignore', 'Solver terminated early.*')
 
-
-def error_rate(x, opts):
-    # parameters
-    fold = opts['fold']
-    xt = fold['xt']
-    yt = fold['yt']
-    xv = fold['xv']
-    yv = fold['yv']
-
-    # Number of instances
-    num_train = np.size(xt, 0)
-    num_valid = np.size(xv, 0)
-    # Define selected features
-    xtrain = xt[:, x == 1]
-    ytrain = yt.reshape(num_train)  # Solve bug
-    xvalid = xv[:, x == 1]
-    yvalid = yv.reshape(num_valid)  # Solve bug
-    # Training
-    mdl = SVC(max_iter=1000, gamma='auto', random_state=10, kernel="rbf")
-    mdl.fit(xtrain, ytrain)
-    # Prediction
-    ypred = mdl.predict(xvalid)
-    acc = np.sum(yvalid == ypred) / num_valid
-    error = 1 - acc
-
-    return error
+classifier = SVC(max_iter=1000, gamma='auto', random_state=10, kernel="rbf")
+x_data = None
+y_data = None
 
 
-# Error rate & Feature size
-def Fun(x, opts):
-    # Parameters
-    alpha = 0.99
-    beta = 1 - alpha
-    # Original feature size
-    max_feat = len(x)
-    # Number of selected features
-    num_feat = np.sum(x == 1)
-    # Solve if no feature selected
-    if num_feat == 0:
-        cost = 1
+# Define objective function
+def f_per_particle(m, alpha):
+    """Computes for the objective function per particle
+
+    Inputs
+    ------
+    m : numpy.ndarray
+        Binary mask that can be obtained from BinaryPSO, will
+        be used to mask features.
+    alpha: float (default is 0.5)
+        Constant weight for trading-off classifier performance
+        and number of features
+
+    Returns
+    -------
+    numpy.ndarray
+        Computed objective function
+    """
+    total_features = 15
+    # Get the subset of the features from the binary mask
+    if np.count_nonzero(m) == 0:
+        X_subset = x_data
     else:
-        # Get error rate
-        error = error_rate(x, opts)
-        # Objective function
-        cost = alpha * error + beta * (num_feat / max_feat)
-
-    return cost
-
-
-def init_position(lb, ub, N, dim):
-    X = np.zeros([N, dim], dtype='float')
-    for i in range(N):
-        for d in range(dim):
-            X[i, d] = lb[0, d] + (ub[0, d] - lb[0, d]) * rand()
-
-    return X
+        X_subset = x_data[:, m == 1]
+    # Perform classification and store performance in P
+    classifier.fit(X_subset, y_data)
+    P = (classifier.predict(X_subset) == y_data).mean()
+    # Compute for the objective function
+    j = (alpha * (1.0 - P)
+         + (1.0 - alpha) * (1 - (X_subset.shape[1] / total_features)))
+    return j
 
 
-def init_velocity(lb, ub, N, dim):
-    V = np.zeros([N, dim], dtype='float')
-    Vmax = np.zeros([1, dim], dtype='float')
-    Vmin = np.zeros([1, dim], dtype='float')
-    # Maximum & minimum velocity
-    for d in range(dim):
-        Vmax[0, d] = (ub[0, d] - lb[0, d]) / 2
-        Vmin[0, d] = -Vmax[0, d]
+def f(x, alpha=0.88):
+    """Higher-level method to do classification in the
+    whole swarm.
 
-    for i in range(N):
-        for d in range(dim):
-            V[i, d] = Vmin[0, d] + (Vmax[0, d] - Vmin[0, d]) * rand()
+    Inputs
+    ------
+    x: numpy.ndarray of shape (n_particles, dimensions)
+        The swarm that will perform the search
 
-    return V, Vmax, Vmin
-
-
-def binary_conversion(X, thres, N, dim):
-    Xbin = np.zeros([N, dim], dtype='int')
-    for i in range(N):
-        for d in range(dim):
-            if X[i, d] > thres:
-                Xbin[i, d] = 1
-            else:
-                Xbin[i, d] = 0
-
-    return Xbin
+    Returns
+    -------
+    numpy.ndarray of shape (n_particles, )
+        The computed loss for each particle
+    """
+    start = datetime.now()
+    n_particles = x.shape[0]
+    j = [f_per_particle(x[i], alpha) for i in range(n_particles)]
+    end = datetime.now()
+    print(humanize.precisedelta(start - end, minimum_unit="seconds", format="%d"))
+    return np.array(j)
 
 
-def boundary(x, lb, ub):
-    if x < lb:
-        x = lb
-    if x > ub:
-        x = ub
-
-    return x
-
-
-def jfs(xtrain, ytrain, opts):
-    # Parameters
-    ub = 1
-    lb = 0
-    thres = 0.5
-    w = 0.9  # inertia weight
-    c1 = 2  # acceleration factor
-    c2 = 2  # acceleration factor
-
-    N = opts['N']
-    max_iter = opts['T']
-    if 'w' in opts:
-        w = opts['w']
-    if 'c1' in opts:
-        c1 = opts['c1']
-    if 'c2' in opts:
-        c2 = opts['c2']
-
-        # Dimension
-    dim = np.size(xtrain, 1)
-    if np.size(lb) == 1:
-        ub = ub * np.ones([1, dim], dtype='float')
-        lb = lb * np.ones([1, dim], dtype='float')
-
-    # Initialize position & velocity
-    X = init_position(lb, ub, N, dim)
-    V, Vmax, Vmin = init_velocity(lb, ub, N, dim)
-
-    # Pre
-    fit = np.zeros([N, 1], dtype='float')
-    Xgb = np.zeros([1, dim], dtype='float')
-    fitG = float('inf')
-    Xpb = np.zeros([N, dim], dtype='float')
-    fitP = float('inf') * np.ones([N, 1], dtype='float')
-    curve = np.zeros([1, max_iter], dtype='float')
-    t = 0
-
-    while t < max_iter:
-        # Binary conversion
-        Xbin = binary_conversion(X, thres, N, dim)
-
-        # Fitness
-        for i in range(N):
-            fit[i, 0] = Fun(Xbin[i, :], opts)
-            if fit[i, 0] < fitP[i, 0]:
-                Xpb[i, :] = X[i, :]
-                fitP[i, 0] = fit[i, 0]
-            if fitP[i, 0] < fitG:
-                Xgb[0, :] = Xpb[i, :]
-                fitG = fitP[i, 0]
-
-        # Store result
-        curve[0, t] = fitG.copy()
-        # print("Iteration:", t + 1)
-        # print("Best (PSO):", curve[0, t])
-        t += 1
-
-        for i in range(N):
-            for d in range(dim):
-                # Update velocity
-                r1 = rand()
-                r2 = rand()
-                V[i, d] = w * V[i, d] + c1 * r1 * (Xpb[i, d] - X[i, d]) + c2 * r2 * (Xgb[0, d] - X[i, d])
-                # Boundary
-                V[i, d] = boundary(V[i, d], Vmin[0, d], Vmax[0, d])
-                # Update position
-                X[i, d] = X[i, d] + V[i, d]
-                # Boundary
-                X[i, d] = boundary(X[i, d], lb[0, d], ub[0, d])
-
-    # Best feature subset
-    Gbin = binary_conversion(Xgb, thres, 1, dim)
-    Gbin = Gbin.reshape(dim)
-    pos = np.asarray(range(0, dim))
-    sel_index = pos[Gbin == 1]
-    num_feat = len(sel_index)
-    # Create dictionary
-    pso_data = {'sf': sel_index, 'c': curve, 'nf': num_feat}
-
-    return pso_data
+def pso_main(x, y, options, dimensions, n_particles, n_processes, iterations):
+    global x_data, y_data
+    x_data = x
+    y_data = y
+    optimizer = BinaryPSO(n_particles=n_particles, dimensions=dimensions, options=options)
+    cost, pos = optimizer.optimize(f, iters=iterations, n_processes=n_processes)
+    return cost, pos
