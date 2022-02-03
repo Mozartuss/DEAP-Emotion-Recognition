@@ -21,7 +21,7 @@ from Utils.DataHandler import LoadData
 
 
 def main(classify_type: str = typer.Argument(..., help="The classification Type:\t Arousal or Valence"),
-         fs: str = typer.Argument(..., help="The channel selection algorithm:\t PCA, MRMR, NONE"),
+         fs: str = typer.Argument(..., help="The channel selection algorithm:\t PCA, MRMR, PSO, NONE"),
          overwrite: bool = typer.Argument(...,
                                           help="If you want to build the dataset from scratch and overwrite all the previous files:\t True, False"),
          gpu: str = typer.Argument(...,
@@ -73,7 +73,7 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
                        step_size=16,
                        sample_rate=128,
                        overwrite=overwrite,
-                       fs=fs_pca or fs_mrmr)
+                       fs=fs_pca or fs_mrmr or fs_pso)
 
     if fs_pca:
         build_dataset_with_pca(participant_list=range(1, 33), components=20)
