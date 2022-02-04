@@ -68,7 +68,7 @@ def use_mrmr(participant_list=range(1, 33), components=20, classify_type: str = 
                 y_train.append(label[i])
 
     pd.DataFrame(backup, columns=["participant", "channels", "n_channels"], index=None).to_csv(
-        Path(SAVE_MRMR_CHANNELS_PATH, "mrmr_channels.csv"), index=False)
+        Path(SAVE_MRMR_CHANNELS_PATH, f"mrmr_channels_{classify_type}.csv"), index=False)
 
     np.save(save_path_data_training, np.array(x_train), allow_pickle=True, fix_imports=True)
     np.save(save_path_label_training, np.array(y_train), allow_pickle=True, fix_imports=True)
