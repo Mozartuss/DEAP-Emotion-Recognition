@@ -40,6 +40,8 @@ def use_pso(participant_list: [int] = range(1, 10), classify_type: str = "Arousa
     with ProcessPoolExecutor(max_workers=n_cores) as executor:
         for label, zx, p, ch, acc in executor.map(exec_pso, participant_list):
             print(f"Finish participant {p} with {len(ch)} channels")
+            ch = list(ch)
+            acc = list(acc)
             backup.append([p, ch, len(ch), acc])
             for i in range(0, zx.shape[0]):
                 if i % 4 == 0:

@@ -174,7 +174,6 @@ def jfs(xtrain, opts, resulting_channels):
 
     # Best feature subset
     x_best = Xgb[0].argsort()[-resulting_channels:][::-1]
-    x_best.sort()
     num_feat = len(x_best)
     # Create dictionary
     pso_data = {'sf': x_best, 'c': curve, 'nf': num_feat, "df": Xgb[0]}

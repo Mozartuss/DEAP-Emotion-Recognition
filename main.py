@@ -80,7 +80,7 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
     elif fs_mrmr:
         use_mrmr(participant_list=range(1, 33), components=20, classify_type=classify_type)
     elif fs_pso:
-        use_pso(participant_list=range(1, 33), classify_type=classify_type, n_particle=128, n_iterations=10,
+        use_pso(participant_list=range(1, 33), classify_type=classify_type, n_particle=32, n_iterations=10,
                 components=20)
     else:
         build_dataset(participant_list=range(1, 33))
