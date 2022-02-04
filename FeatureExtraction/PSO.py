@@ -52,7 +52,7 @@ def use_pso(participant_list: [int] = range(1, 10), classify_type: str = "Arousa
                     y_train.append(label[i])
 
     pd.DataFrame(backup, columns=["participant", "channels", "n_channels", "channel_acc"], index=None).to_csv(
-        Path(SAVE_PSO_CHANNELS_PATH, "pso_channels.csv"), index=False)
+        Path(SAVE_PSO_CHANNELS_PATH, f"pso_channels_{classify_type}.csv"), index=False)
 
     np.save(str(save_path_data_training), np.array(x_train), allow_pickle=True, fix_imports=True)
     np.save(str(save_path_label_training), np.array(y_train), allow_pickle=True, fix_imports=True)
