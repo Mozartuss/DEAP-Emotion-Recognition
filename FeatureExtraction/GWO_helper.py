@@ -184,6 +184,6 @@ def jfs(xtrain, ytrain, opts, resulting_channels):
     x_best = Xalpha[0].argsort()[-resulting_channels:][::-1]
     num_feat = len(x_best)
     # Create dictionary
-    gwo_data = {'sf': x_best, 'c': curve, 'nf': num_feat}
+    gwo_data = {'sf': x_best, 'c': curve, 'nf': num_feat, "df": Xalpha[0]}
 
     return gwo_data
