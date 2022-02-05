@@ -85,6 +85,18 @@ With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr),
     <img src="https://user-images.githubusercontent.com/32893711/152136440-59c6730c-1544-479f-bff1-1e6f350d3410.png" alt="Valence MRMR" width="45%"/>
 </p>
 
+After adding the partical swarm optimization (PSO) as channel selection moethod, the results differ relativ strongly, so for arousal we get an Accuracy of about 87.08% and a loss of 0.3120 on the first training procedure but on a second run, the Model didn't train correctly, so accuracy remained at 58.91% throughout the training process. You can see the ruslts below. On the left side the first training procedure and on the right side the second one.
+
+<p align="middle">
+    <img src="https://user-images.githubusercontent.com/32893711/152639147-edfca5a0-1828-4b4e-a15b-d616aac05af7.png" alt="Arousal PSO" width="45%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/152639153-26e2e140-8dc7-4304-8dc0-f687d6fcd52a.png" alt="Arousal 2 PSO" width="45%"/>
+</p>
+
+On the other side the training with the PSO and the Valence labels work very well, so there we get an accuracy of about 93.15% and a loss of 0.1874.
+
+<p align="middle">
+    <img src="https://user-images.githubusercontent.com/32893711/152639727-77472903-1407-4891-9638-4cc005353d4c.png" alt="Valence PSO" width="45%"/>
+</p>
 
 
 ## References
