@@ -4,16 +4,20 @@ import numpy as np
 from sklearn.preprocessing import normalize, StandardScaler
 from tensorflow.keras.utils import to_categorical
 
-from Utils.Constants import FINAL_DATASET_PATH, FINAL_DATASET_PATH_PCA, FINAL_DATASET_PATH_MRMR, FINAL_DATASET_PATH_PSO
+from Utils.Constants import FINAL_DATASET_PATH, FINAL_DATASET_PATH_PCA, FINAL_DATASET_PATH_MRMR, FINAL_DATASET_PATH_PSO, \
+    FINAL_DATASET_PATH_GWO
 
 
-def prepare_dataset(label_type: str = "Arousal", pca: bool = False, mrmr: bool = False, pso: bool = False):
+def prepare_dataset(label_type: str = "Arousal", pca: bool = False, mrmr: bool = False, pso: bool = False,
+                    gwo: bool = False):
     if pca:
         data_path = FINAL_DATASET_PATH_PCA
     elif mrmr:
         data_path = FINAL_DATASET_PATH_MRMR
     elif pso:
         data_path = FINAL_DATASET_PATH_PSO
+    elif gwo:
+        data_path = FINAL_DATASET_PATH_GWO
     else:
         data_path = FINAL_DATASET_PATH
 
