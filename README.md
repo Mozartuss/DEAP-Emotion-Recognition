@@ -71,13 +71,14 @@ After training the moddel with an 75/25 split we get an accuracy of about 92.17%
     <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="Arousal" width="45%"/>
     <img src="https://user-images.githubusercontent.com/32893711/150751426-829e6310-7275-4400-bddc-86f6fda6cfd0.png" alt="Valence" width="45%"/>
 </p>
-
+### PCA
 In order to achieve a better result, the channel optimization algorithm Principal component analysis (PCA) was applied, however, this did not optimize the accuracy in classifying the arousal, also the training process was significantly less effective than in the previous attempt. Arousal was classified with an accuracy of 83.39% and a loss of 0.3658
 
 <p align="middle">
     <img src="https://user-images.githubusercontent.com/32893711/151954460-e1ce13e9-efb6-4caf-b964-1ffa8da84785.jpg" alt="Arousal PCA" width="45%"/>
 </p>
 
+### mRMR
 With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr), the same accuracy was achieved as without channel optimisation, however, 20 channels were still used here, probably only when more channels are removed different results are obtained. Arousal was classified with an accuracy of 92.74% and a loss of 0.1892, and Valence with an Accuracy of 92.36% and a loss of 0.1983
 
 <p align="middle">
@@ -85,6 +86,7 @@ With the channel-selected algorithm Minimum redundancy maximum relevance (mrmr),
     <img src="https://user-images.githubusercontent.com/32893711/152136440-59c6730c-1544-479f-bff1-1e6f350d3410.png" alt="Valence MRMR" width="45%"/>
 </p>
 
+### PSO
 After adding the partical swarm optimization (PSO) as channel selection moethod, the results differ relativ strongly, so for arousal we get an Accuracy of about 87.08% and a loss of 0.3120 on the first training procedure but on a second run, the Model didn't train correctly, so accuracy remained at 58.91% throughout the training process. You can see the ruslts below. On the left side the first training procedure and on the right side the second one.
 
 <p align="middle">
@@ -97,6 +99,9 @@ On the other side the training with the PSO and the Valence labels work very wel
 <p align="middle">
     <img src="https://user-images.githubusercontent.com/32893711/152639727-77472903-1407-4891-9638-4cc005353d4c.png" alt="Valence PSO" width="45%"/>
 </p>
+
+### GWO
+The Grey Wolf optimizer also belongs to the swarm based feature selection algorithms and was also used here to reduce the channels, this algorithm provided a performant and accurate classification. Arousal accuracy: 88.74% and loss: 0.2765, Valence accuracy 93.83% and Loss: 0.1669
 
 
 ## References

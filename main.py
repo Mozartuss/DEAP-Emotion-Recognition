@@ -5,6 +5,7 @@ from pickle import dump
 import matplotlib.pyplot as plt
 import typer
 
+from FeatureExtraction.CS import use_cs
 from FeatureExtraction.GWO import use_gwo
 from FeatureExtraction.MRMR import use_mrmr
 from FeatureExtraction.PCA import build_dataset_with_pca
@@ -22,7 +23,7 @@ from Utils.DataHandler import LoadData
 
 
 def main(classify_type: str = typer.Argument(..., help="The classification Type:\t Arousal or Valence"),
-         fs: str = typer.Argument(..., help="The channel selection algorithm:\t PCA, MRMR, PSO, GWO, NONE"),
+         fs: str = typer.Argument(..., help="The channel selection algorithm:\t PCA, MRMR, PSO, GWO, CS, NONE"),
          overwrite: bool = typer.Argument(...,
                                           help="If you want to build the dataset from scratch and overwrite all the previous files:\t True, False"),
          gpu: str = typer.Argument(...,
@@ -49,6 +50,7 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
     fs_mrmr = False
     fs_pso = False
     fs_gwo = False
+    fs_cs = False
     classify_name = classify_type.lower()
 
     if fs != "":
@@ -62,6 +64,8 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
         fs_pso = True
     elif fs.lower() == "gwo":
         fs_gwo = True
+    elif fs.lower() == "cs":
+        fs_cs = True
 
     SAVED_MODEL_GRAPH_PATH.mkdir(exist_ok=True)
     SAVE_TRAINED_MODEL_PATH.mkdir(exist_ok=True)
@@ -77,7 +81,7 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
                        step_size=16,
                        sample_rate=128,
                        overwrite=overwrite,
-                       fs=fs_pca or fs_mrmr or fs_pso or fs_gwo)
+                       fs=fs_pca or fs_mrmr or fs_pso or fs_gwo or fs_cs)
 
     if fs_pca:
         build_dataset_with_pca(participant_list=range(1, 33), components=20, classify_type=classify_type)
@@ -89,10 +93,14 @@ def main(classify_type: str = typer.Argument(..., help="The classification Type:
     elif fs_gwo:
         use_gwo(participant_list=range(1, 33), classify_type=classify_type, n_particle=32, n_iterations=10,
                 components=20)
+    elif fs_cs:
+        use_cs(participant_list=range(1, 33), classify_type=classify_type, n_particle=32, n_iterations=10,
+               components=20)
     else:
         build_dataset(participant_list=range(1, 33))
 
-    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=fs_pca, mrmr=fs_mrmr, pso=fs_pso, gwo=fs_gwo)
+    x_train, y_train, x_test, y_test = prepare_dataset(classify_name, pca=fs_pca, mrmr=fs_mrmr, pso=fs_pso, gwo=fs_gwo,
+                                                       cs=fs_cs)
 
     print("Training: ", x_train.shape, y_train.shape)
     print("Test: ", x_test.shape, y_test.shape)
