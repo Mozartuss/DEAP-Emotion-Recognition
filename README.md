@@ -71,6 +71,7 @@ After training the moddel with an 75/25 split we get an accuracy of about 92.17%
     <img src="https://user-images.githubusercontent.com/32893711/150337781-f1035566-19ce-4e00-9e6b-f523db706dfd.jpg" alt="Arousal" width="45%"/>
     <img src="https://user-images.githubusercontent.com/32893711/150751426-829e6310-7275-4400-bddc-86f6fda6cfd0.png" alt="Valence" width="45%"/>
 </p>
+
 ### PCA
 In order to achieve a better result, the channel optimization algorithm Principal component analysis (PCA) was applied, however, this did not optimize the accuracy in classifying the arousal, also the training process was significantly less effective than in the previous attempt. Arousal was classified with an accuracy of 83.39% and a loss of 0.3658
 
@@ -103,6 +104,10 @@ On the other side the training with the PSO and the Valence labels work very wel
 ### GWO
 The Grey Wolf optimizer also belongs to the swarm based feature selection algorithms and was also used here to reduce the channels, this algorithm provided a performant and accurate classification. Arousal accuracy: 88.74% and loss: 0.2765, Valence accuracy 93.83% and Loss: 0.1669
 
+<p align="middle">
+    <img src="https://user-images.githubusercontent.com/32893711/152677570-32f08436-f947-48f6-9853-36d3d9258077.png" alt="Arousal GWO" width="45%"/>
+    <img src="https://user-images.githubusercontent.com/32893711/152677578-cfab73db-c95b-4c87-8558-1a0278fc398e.png" alt="Valence GWO" width="45%"/>
+</p>
 
 ## References
 
