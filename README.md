@@ -109,6 +109,10 @@ The Grey Wolf optimizer also belongs to the swarm based feature selection algori
     <img src="https://user-images.githubusercontent.com/32893711/152677578-cfab73db-c95b-4c87-8558-1a0278fc398e.png" alt="Valence GWO" width="45%"/>
 </p>
 
+### CS
+The Cuckoo Search algorithm is also part of the swarm based feature selection algorithms and in our case the algorithm boost the classification:
+Arousal Accuracy: 93.33% Loss: 0.1846 and Valence Accuracy: 93.67% Loss: 0.1738
+
 ## References
 
 <a id="1">[1]</a>
