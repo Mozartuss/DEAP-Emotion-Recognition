@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use parts of the repository, please cite it in your paper as below."
+authors:
+- family-names: "Kleybolte"
+  given-names: "Lukas"
+  orcid: " https://orcid.org/0000-0002-9886-5592"
+title: "DEAP-Emotion-Recognition"
+version: 1.0.0
+url: "https://github.com/Mozartuss/DEAP-Emotion-Recognition"
