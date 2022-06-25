@@ -7,7 +7,29 @@ authors:
 - family-names: "Balic"
   given-names: "Sabahudin"
   orcid: "https://orcid.org/0000-0003-4858-9494"
+- family-names: "Märtin"
+  given-names: "Christian"
+  orcid: "https://orcid.org/0000-0002-3646-1920"
 title: "A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition"
-doi: 10.1007/978-3-031-05409-9_23
+doi: "10.1007/978-3-031-05409-9_23"
 version: 1.0.0
 url: "https://github.com/Mozartuss/DEAP-Emotion-Recognition"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Kleybolte"
+    given-names: "Lukas"
+    orcid: "https://orcid.org/0000-0002-9886-5592"
+  - family-names: "Balic"
+    given-names: "Sabahudin"
+    orcid: "https://orcid.org/0000-0003-4858-9494"
+  - family-names: "Märtin"
+    given-names: "Christian"
+    orcid: "https://orcid.org/0000-0002-3646-1920"
+  doi: "10.1007/978-3-031-05409-9_23"
+  journal: "Lecture Notes in Computer Science, vol 13303. Springer, Cham."
+  month: 6
+  start: 303 # First page number
+  end: 317 # Last page number
+  title: "A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition"
+  year: 2022
