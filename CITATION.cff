@@ -3,10 +3,11 @@ message: "If you use parts of the repository, please cite it in your paper as be
 authors:
 - family-names: "Kleybolte"
   given-names: "Lukas"
-  orcid: " https://orcid.org/0000-0002-9886-5592"
+  orcid: "https://orcid.org/0000-0002-9886-5592"
 - family-names: "Balic"
   given-names: "Sabahudin"
-  orcid: " https://orcid.org/0000-0003-4858-9494"
-title: "DEAP-Emotion-Recognition"
+  orcid: "https://orcid.org/0000-0003-4858-9494"
+title: "A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition"
+doi: 10.1007/978-3-031-05409-9_23
 version: 1.0.0
 url: "https://github.com/Mozartuss/DEAP-Emotion-Recognition"
