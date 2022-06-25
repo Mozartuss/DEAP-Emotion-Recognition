@@ -27,7 +27,12 @@ preferred-citation:
     given-names: "Christian"
     orcid: "https://orcid.org/0000-0002-3646-1920"
   doi: "10.1007/978-3-031-05409-9_23"
-  journal: "Lecture Notes in Computer Science, vol 13303. Springer, Cham."
+  journal: "Human-Computer Interaction. Technological Innovation"
+  volume-title: "Lecture notes in computer science"
+  volume: "13303"
+  publisher: "Springer International Publishing"
+  editor: "Kurosu, Masaaki"
+  isbn: "978-3-031-05409-9"
   month: 6
   start: 303 # First page number
   end: 317 # Last page number
