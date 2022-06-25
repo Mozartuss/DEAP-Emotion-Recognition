@@ -1,4 +1,11 @@
-# Emotion recognition with the LSTM RNN
+# A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition
+
+The Repository for the Paper
+
+> Balic, S., Kleybolte, L., & Märtin, C. (2022). A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition. In Human-Computer Interaction. Technological Innovation (pp. 303–317). Springer International Publishing. https://doi.org/10.1007/978-3-031-05409-9_23
+
+# Notes
+___
 
 Implement an modified version of the LSTM RNN Model wich is used by Acharya D. et al. [[1]](#1) to get an accuracy of about 92.17% (Arousal) and about 94.46% (Valence)
 
