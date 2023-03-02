@@ -1,8 +1,9 @@
 # A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition
 
-The Repository for the Paper
-
+This repository contains the Code for the published Paper:
 > Balic, S., Kleybolte, L., & Märtin, C. (2022). A Swarm Intelligence Approach: Combination of Different EEG-Channel Optimization Techniques to Enhance Emotion Recognition. In Human-Computer Interaction. Technological Innovation (pp. 303–317). Springer International Publishing. https://doi.org/10.1007/978-3-031-05409-9_23
+
+Please cite our paper if you use This Repository for your Work
 
 # Notes
 ___
